@@ -1,16 +1,57 @@
-import {sayHi} from './test'
-import { caculateArea } from './test'
+import {sayHi} from './test';
+import { caculateArea } from './test';
+import type Product from './test';
+
 
 function App() {
+  interface DiscountProduct extends Product{
+    discountPercent : number;
+  }
 
-  console.log(sayHi('moy', 18));
-  console.log(caculateArea(18 , 36));
+  const products : DiscountProduct[] = [
+    {
+        id : 1,
+        name : 'laptop',
+        price : 250,
+        tags : ['dien tu' , 'apple'],
+        discountPercent : 10
+    },
+    {
+        id : 2,
+        name : 'iphone',
+        price : 150,
+        tags : ['dien tu' , 'apple'],
+        discountPercent : 20,
+    }
+  ];
+  products.push({
+      id : 3,
+      name : 'kinh',
+      price : 50,
+      description : 'helnah',
+      tags : ['dien tu' , 'apple'],
+      discountPercent : 50,
+  });
 
+  const getDiscountPrice = (product : DiscountProduct) => product.price * (1 - product.discountPercent / 100);
+  
   return (
     <>
       <h1>Test TypeScript</h1>
-      <h2>Ngày 2</h2>
-      <p>Đáp án : {caculateArea(18 , 36)}</p>
+      <h2>Ngày 3 : {sayHi('moy', 18)}</h2>
+      <p>Diện tích hình vuông : {caculateArea(18 , 36)}</p>
+      <ul>Danh sách sản phẩm  : 
+        {
+        products.map(value => 
+          <li>
+            <p>Tên : {value.name}</p>
+            <p style={{textDecorationLine : 'line-through' , color : 'red'}}>Giá ban đầu : {value.price}</p>
+            <p style={{color : 'red'}}>Giá sau khi giảm : {getDiscountPrice(value)}</p>
+            <p>Mô tả : {value.description ?? 'không có mô tả'}</p>
+          </li>
+        )
+        }
+      </ul>
     </>
   )
 }

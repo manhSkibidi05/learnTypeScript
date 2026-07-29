@@ -5,3 +5,11 @@ console.log(count)
 export const sayHi = (name : string , anyNum : number) : string => `${name} + ${anyNum}`
 
 export const caculateArea = (width : number , height : number) => width * height;
+
+export default interface Product{
+    id : number,
+    name : string,
+    price : number,
+    description ?: string,
+    tags : string[]
+}

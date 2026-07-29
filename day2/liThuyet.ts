@@ -112,14 +112,14 @@
 
 // 7. Intersection Types (&) 
     // - Khi muốn kết hợp nhiều type lại với nhau có thể dùng kí tự & tương tự như kế thừa của interface 
-    type A = {panket : string}
-    type B = {chicken : string}
-    type C = A & B;
-    const iShowSpeed : C = {
+    type Ac = {panket : string}
+    type Bc = {chicken : string}
+    type Cc = Ac & Bc;
+    const iShowSpeed : Cc = {
         panket : 'pancake',
         chicken : 'kfc'
     }
-    const iis : C = {
+    const iis : Cc = {
         panket : 'pancakes',
         chicken : 'kfcs'
     }
@@ -130,33 +130,47 @@
 
 // - Câu hỏi tự ôn tập 
 
-    // 1. Interface dùng để làm gì ? cho ví dụ 
-    // -> Interface sử dụng làm bản thiết kế cho 1 object , giúp định nghĩa các thuộc tính và kiểu dữ liệu 
+    // 1. Interface dùng để làm gì ? cho ví dụ ? 
+    // -> Interface dùng để định nghĩa 1 object , tạo bản thiết kế cho object bằng cách thêm các thuộc tính và kiểu của thuộc tính đó
+    // -> Ngoài ra interface không chỉ dùng cho object mà còn có thể mô tả : 
+        // + kiểu hàm : tạo ra cấu trúc hàm , hàm mang kiểu này sẽ phải tuân theo cấu trúc 
+        // + kiểu mảng
+        // + class 
 
-    interface Car {
-        brand : string,
-        model : string,
-        year ?: number
-    };
-    const ferari : Car = {
-        brand : 'ferari',
-        model : 'kiki',
-        year : 2020
-    }
+    // vd : 
+        interface Lego{
+            name : string,
+            puzzle : number,
+            year ?: number // thuộc tính không bắt buộc 
+        }
+        const legoNo1 : Lego = {
+            name : 'son wukong',
+            puzzle : 250,
+        }
 
     // 2. Khác biệt chính giữa interface và type là gì ? 
-    // -> interface chỉ sử dụng để cấu trúc cho object còn type sử dụng tạo ra 1 kiểu dữ liệu mới dựa trên các 
-    // kiểu đã có sẵn không chỉ object còn union , function ...
+    // -> Khác biệt chính giữa interface và type là :
+        // + interface chỉ dùng để xây dựng khuân mẫu cho object , type xây dựng kiểu dữ liệu mới từ những kiểu dữ liệu có sẵn bao gồm object , tuple , union...
+        // + interface có thể mở rộng qua declaration merging (khi khai báo interface có cùng tên thì sẽ tự gộp lại) , còn type thì không (phải unique)
+        // + interface thường dùng cho các API công khai vì khả năng mở rộng , còn type tiện cho union , tuple , utility types
 
-    // 3. Kế thừa trong interface là gì ?
-    // -> Interface sử dụng từ khóa extends để dùng 1 interface kế thừa toàn bộ thuộc tính của 1 interface khác 
+    // 3. Làm thế nào tạo một interface Admin kế thừa từ User và thêm thuộc tính role : string ? 
+    // -> Sử dụng từ khóa extends khi dùng 1 interface kế thừa từ 1 interface khác và sở hữu tất cả thuộc tính của interface này 
+    // -> interface có thể extends nhiều interface cùng lúc (dùng dấu phẩy) , có thể extends từ type nếu type đó là object
 
-    // 4. readonly khác gì const ? 
-    // -> readonly và const đều tạo ra hằng số chỉ dùng để đọc và không thay đổi được , khác nhau ở đây là readonly
-    // sử dụng cho 1 thuộc tính khi định nghĩa object bằng interface còn const sử dụng để khai báo 1 biến 
+    // 4. Cho biết readonly khác gì với const ? 
+    // -> readonly và const đều tạo ra các giá trị chỉ dùng để đọc và không thay đổi được khác ở đây là readonly dùng cho 1 thuộc
+    // tính , const dùng khi khởi tạo biến 
+    // -> const ngăn không cho gán lại biến , nhưng nếu biến là object thì có thể thay đổi thuộc tính bên trong 
+    // -> readonly ngăn thay đổi trực tiếp thuộc tính sau khi khởi tạo object 
 
-    // 5. Khi nào bạn nên dùng index signature ?
-    // -> Nên dùng index signatur khi mà dữ liệu chưa biết tên thuộc tính 
+    // 5. Khi nào nên dùng index signature ? 
+        // + Dùng khi chưa biết tên thuộc tính 
+        // + Dùng khi muốn mô tả đối tượng với key động 
+    
+    // 6. Viết interface cho hàm có 2 tham số number và trả về number 
 
-    // 6.Viết một interface cho một hàm có 2 tham số number, trả về number, bằng cách sử dụng interface (gợi ý: call signature)
-    // .
+    interface Sum{
+        (a : number , b : number) : number;
+    }
+    const tong : Sum = (a , b) => a + b;
