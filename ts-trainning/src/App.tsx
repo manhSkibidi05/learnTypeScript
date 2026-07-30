@@ -1,6 +1,9 @@
 import {sayHi} from './test';
 import { caculateArea } from './test';
 import type Product from './test';
+import { mergeTests } from './test';
+import { arrFood } from './test';
+import { findFood } from './test';
 
 
 function App() {
@@ -52,6 +55,9 @@ function App() {
         )
         }
       </ul>
+      <h3>Gộp mảng : {mergeTests}</h3>
+      <h3>Chuyển mảng : {arrFood}</h3>
+      <h3>Hôm nay ăn gì : {findFood?.name}</h3>
     </>
   )
 }

@@ -73,4 +73,100 @@
             const index = logAndReturn<string>('goat');
             
 
+// 2. Generic function 
+    // - vd sử dụng generic với mảng 
+    function getFirstElement<T> (arr : T[]) : T | undefined {
+        return arr.length > 0 ? arr[0] : undefined
+    }
+    const firstNumber = getFirstElement([ 1, 2, 3]);
 
+// 3. Generic interface
+    // - vd sử dụng generic với object 
+
+    interface Repository<T> {
+        getById(id : number) : T,
+        getAll() : T[]
+    }
+
+    interface User {
+        id : number,
+        name : string
+    }
+
+    const userRepo : Repository<User> = {
+        getById(id){ return {id  , name : 'number1'}},
+        getAll(){ return [{id : 1  , name : 'number1'}] }
+    }
+
+// 4. Generic constraints 
+    // -> Sử dụng extends để giới hạn kiểu mà generic có thể nhận 
+
+    interface HasLength {
+        length : number
+    }
+    // -> T extends từ HasLength chứa thuộc tính length là 1 number -> T có thể truy cập được thuộc tính này do ràng buộc với HasLength
+    function logLength<T extends HasLength> (item : T) : T {
+        console.log(item.length);
+        return item
+    }
+    // -> Khi gọi hàm truyền kiểu vào T thì cần truyền vào kiểu có thuộc tính length : number , có thể là array/string hoặc object sở hữu length : number 
+    const log = logLength({length : 10})
+
+    // -> Trong generic khi kiểu T extends từ kiểu khác thì lúc này T phải có toàn bộ các thuộc tính và phương thức mà kiểu 
+    // của T đã extends , khi truyền kiểu dữ liệu vào T thì dữ liệu đó phải có thuộc tính mà kiểu T đã kế thừa .
+
+    // -> extends trong generic có ý nghĩa là ràng buộc kiểu , T extends từ U thì T phải có cấu trúc chứa tất cả thuộc tính 
+    // và phương thức của U . Khi truyền kiểu vào T thì do ràng buộc này mà giới hạn đi số kiểu có thể truyền vào 
+
+// 5. Default type parameter 
+
+    // -> Sử dụng khi bạn không muốn buộc người dùng phải chỉ định kiểu mỗi khi sử dụng generic , lúc này bạn có thể cung cấp
+    // 1 kiểu mặc định . Nếu không chỉ định thì TypeScript sẽ sử dụng kiểu mặc định là unknown/any 
+
+    // - Cú pháp : 
+    function makePair <T = string> (value : T) : [T , T] {
+        return [value , value]
+    }
+
+    const pair1 = makePair('hello');
+    const pair2 = makePair(1);
+
+    interface HasId {
+        id: number;
+    }
+    function fetchItem<T extends HasId = { id: number }>(id: number): T {
+    // giả định lấy dữ liệu
+    return { id } as T;
+    }
+    // Khi dùng:
+    const item = fetchItem(1); // T mặc định là { id: number }
+    const user = fetchItem<{ id: number; name: string }>(2); // T cụ thể
+
+// 6 . Lưu ý về sử dụng dấu <> trong TypeScript 
+
+    // 1. Dùng trong generic : tham số kiểu 
+    // - Đây là trường hợp phổ biến nhất , bạn dùng <> để khai báo 1 hoặc nhiều tham số kiểu cho hàm/class/interface/type alias
+
+    // 2. Dùng trong type Assertion : khẳng định kiểu 
+    // - <> sử dụng để ép kiểu , báo cho TypeScript biết bạn biết rõ kiểu dữ liệu hơn nó 
+
+    let someValue: any = 'hello';
+    let strLength = (<string>someValue).length;
+    // -> cú pháp này ít dùng trong JSX vì dễ gây nhầm lẫn với thẻ HTML , thay vào đó người ta sử dụng cú pháp as 
+
+    let strLength2 = (someValue as string).length;
+
+    // 3. Dùng trong JSX (react)
+    // - Khi viết React với TypeScript <> còn được dùng để khai báo kiểu cho props của component trong JSX 
+
+    // const MyComponent = <T,>(props: { data: T }) => { ... };
+    // Hoặc
+    // function MyComponent<T>(props: { data: T }) { ... }
+
+    // -> Trong trường hợp này , dấu phảy say T để TypeScript hiểu đây là generic function không phải thẻ JSX 
+
+    // 4. Dùng trong khai báo kiểu cho mảng : Array<T> 
+
+    let numbers: Array<number> = [1, 2, 3];
+    // Tương đương với:
+    let numbers2: number[] = [1, 2, 3];
