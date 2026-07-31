@@ -117,3 +117,18 @@ export default interface Product{
         return arr.map(callback)
     }
     export const arrFood = mapArray(['0' , '3' , '2' , '6'] , (item) => Number(item));
+
+// Bài tập thực hành ngày 4 : 
+
+    // 1 . Type Guard với typeof: Viết hàm formatValue(value: string | number): string – 
+    // nếu là string thì trả về chuỗi in hoa, nếu là number thì trả về chuỗi định dạng có 2 số thập phân.
+
+    export function formatValue(value : string | number){
+        if(typeof value === 'string'){
+            return value.toUpperCase();
+        }else{
+            return value.toFixed(2)
+        }
+    }
+
+    
