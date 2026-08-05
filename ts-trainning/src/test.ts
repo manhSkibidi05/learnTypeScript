@@ -131,4 +131,19 @@ export default interface Product{
         }
     }
 
-    
+    // 2. Type Guard với in : Cho 2 interface Admin ({ role : string ; manage() : void }) và Customer ({ name : string 
+    // , purchase() : void }) . Viết hàm handlePerson (person : Admin | Customer) dùng in để gọi phương thức phù hợp
+
+    interface Admin {
+        role : string,
+        manage() : void
+    }
+
+    interface Customer {
+        name : string,
+        purchase() : void
+    }
+
+    function handlePerson(person : Admin | Customer){
+        
+    }

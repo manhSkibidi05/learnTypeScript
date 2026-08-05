@@ -104,7 +104,7 @@
         // + <type>value 
 
         let someValue1: unknown = "Hello";
-        let strLength1: number = (someValue as string).length;
+        let strLength1: number = (someValue1 as string).length;
 
         // -> type assertion không ép kiểu như ép kiểu trong ngôn ngữ khác , nó chỉ là cách bạn nói với TypeScript "hãy tin tôi , biến này là kiểu này"
         // Nếu sai có thể gây lỗi runtime 
