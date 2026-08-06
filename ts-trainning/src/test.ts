@@ -144,6 +144,98 @@ export default interface Product{
         purchase() : void
     }
 
-    function handlePerson(person : Admin | Customer){
-        
+    export function handlePerson(person : Admin | Customer){
+        if('role' in person){
+            person.manage()
+        }else{
+            person.purchase()
+        }
     }
+    
+    // 3. User-defined type guard : Tạo interface Car (có drive()) và Bicycle (có pedal()). 
+    // Viết hàm isCar(vehicle: any): vehicle is Car. Sau đó viết hàm useVehicle(vehicle: Car | Bicycle) dùng isCar.
+
+    interface Car{
+        brandName : string,
+        drive() : void
+    };
+    interface Bicycle{
+        brandName : string,
+        pedal() : void
+    }
+    function isCar(vehicle : any) : vehicle is Car{
+        return 'drive' in vehicle
+    }
+    export function useVehicle(vehicle : Car | Bicycle){
+        if(isCar(vehicle)){
+            vehicle.drive()
+        }else{
+            vehicle.pedal()
+        }
+    }
+
+    // 4. Type Assertion : Khai báo một biến unknownValue: unknown = "TypeScript". Dùng type assertion để truy cập .length và in ra.
+
+    const unknownValue : unknown = 'TypeScript';
+    console.log((unknownValue as string).length)
+
+    // 5. Discriminated Union : Tạo discriminated union cho các thông báo 
+
+    export interface SuccessMessage{ type : 'success' , text : string};
+    export interface ErrorMessage{ type : 'error' , text : string , code : number};
+    export interface WarningMessage{ type : 'warning' , text : string};
+
+    export function handleMessage(mgs : SuccessMessage | ErrorMessage | WarningMessage) : string{
+        switch(mgs.type){
+            case 'success' :
+                return `Thành công : ${mgs.text}`;
+            case 'error' :
+                return `Lỗi : ${mgs.text} (code : ${mgs.code})`;
+            case 'warning' :
+                return `Cảnh báo : ${mgs.text}`;
+            default : 
+                return '';
+        }
+    }
+
+    // 6. Kết hợp : Viết hàm getLength(target: string | number | { length: number }) dùng type guard để trả về length
+
+    export function getLength(target : string | number | {length : number}){
+        if(typeof target === 'string'){
+            return target.length;
+        }
+
+        if(typeof target !== 'number' && 'length' in target){
+            return target.length;
+        }
+
+        return target.toString().length;
+    }
+
+    // - Toán tử in sử dụng trong bài trên : in toán tử chỉ hoạt động với object (mảng, hàm...) . Nếu cố gắng dùng in trên 1 giá trị kiểu
+    // nguyên thủy như number , string...Bạn sẽ gặp lỗi trong runtime
+    // -> Vì tham số target có thể là kiểu number nên bắt buộc chặn kiểu number sau đó mới kiểm tra thuộc tính length trong object 
+
+// Bài tập thực hành : 
+
+    // 1. Partial và Required : Cho interface Config có host: string, port: number, secure: boolean.
+    //  Tạo một hàm updateConfig(current: Config, updates: Partial<Config>): Config trả về object mới merge từ current và updates.
+
+    export interface Config {
+        host : string,
+        port : number,
+        secure : boolean
+    }
+
+    export function updateConfig(current : Config , updates : Partial<Config> ){
+        return {
+            ...current,
+            ...updates
+        }
+    }
+
+    // 2. Pick và Omit : Cho interface Employee có id, name, position, salary, department.
+    // Tạo type EmployeeSummary = Pick<Employee, 'id' | 'name' | 'position'>. 
+    // Tạo type ConfidentialEmployee = Omit<Employee, 'salary'>. Viết hàm getEmployeeSummary(emp: Employee): EmployeeSummary. 
+
+    

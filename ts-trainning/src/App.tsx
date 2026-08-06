@@ -5,7 +5,10 @@ import { mergeTests } from './test';
 import { arrFood } from './test';
 import { findFood } from './test';
 import { formatValue } from './test';
-
+import type { ErrorMessage } from './test';
+import { handleMessage } from './test';
+import type { Config } from './test';
+import { updateConfig } from './test';
 
 function App() {
   interface DiscountProduct extends Product{
@@ -42,6 +45,22 @@ function App() {
   let someValue1: unknown = 1;
   let strLength1: string = (someValue1 as string).length ? 'Value là chữ' : 'Value là số'; 
   
+  let thongBao : ErrorMessage = {
+    type : 'error',
+    text : 'Lỗi vì quá đẹp trai',
+    code : 404
+  }
+
+  let ketNoi : Config = {
+    host : 'localhost',
+    port : 3000,
+    secure : true
+  }
+
+  let ketNoiLai : Partial<Config> = {
+    port : 5000
+  }
+
   return (
     <>
       <h1>Test TypeScript</h1>
@@ -64,6 +83,10 @@ function App() {
       <h3>Hôm nay ăn gì : {findFood?.name}</h3>
       <h3>wtf : {strLength1}</h3>
       <h3>chuỗi hay số : {formatValue(199)}</h3>
+      <h3>Thông báo : {handleMessage(thongBao)}</h3>
+      <hr />
+      <h3>Cổng kết nối ban đầu: {`${ketNoi.host}:${ketNoi.port}`}</h3>
+      <h3>Cổng kết nối sau đó : {`${updateConfig(ketNoi , ketNoiLai).host}:${updateConfig(ketNoi , ketNoiLai).port}`}</h3>
     </>
   )
 }

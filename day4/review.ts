@@ -5,6 +5,7 @@
         // và có thể sử dụng an toàn các thuộc tính và phương thức của biến đó
         // -> Cần dùng Type Guard bởi vì cần đảm bảo 1 biến khi sử dụng thuộc tính và phương thức của kiểu dữ liệu này cần đảm bảo 
         // chắc chắn rằng nó thuộc kiểu dữ liệu này .
+        // -> Type Guard giúp thu hẹp kiểu dữ liệu trong 1 khối code nhất định 1 biến chỉ mang kiểu dữ liệu này
 
     // 2. Kể tên 4 cách tạo Type guard và ví dụ 
         // + typeof : dùng khi đứng trước 1 biến sẽ trả về kiểu dữ liệu của biến đó 
@@ -58,7 +59,7 @@
         // -> thường sử dụng kiểm tra 1 object và tạo ra vùng riêng sử dụng thuộc tính và phường thức object đó 1 cách an toàn 
             // vd : 
             function checkParameter(random : Laptop | Pc) : random is Laptop{
-                return (random as Laptop).flexible !== undefined
+                return 'flexible' in random
             } 
 
             function getValue(random : Laptop | Pc) : void {
@@ -72,7 +73,7 @@
     // 3. Viết 1 user-defined type guard isString(value : unknown) : value is string 
 
         function isString(value : unknown) : value is string{
-            return (value as string).length !== undefined
+            return typeof value === 'string';
         }
     
     // 4. Type Assertion khác gì với ép kiểu sử dụng trong c++/java ? khi nào bạn nên dùng as ? 
@@ -83,6 +84,10 @@
         // kiểu mà chỉ cung cấp niềm tin cho type script với 1 biến chưa rõ kiểu dữ liệu
 
         // - Khi nào nên dùng as : khi người lập trình viên biết rõ kiểu dữ liệu của 1 biến hơn type script 
+        // -> Bổ sung : 
+            // + Trong react , bạn thường dùng as để ép kiểu cho useRef hoặc xử lí event target
+            // + Lưu ý : Type assertion bị từ chối nếu 2 kiểu không có mối quan hệ nào (ví dụ ép string sang number sẽ lỗi , trừ khi dùng unknown trung gian)
+            // + Ngoài as , có thể dùng angle-bracket : <type>value , nhưng tránh sử dụng trong file .tsx
 
     // 5. Cho ví dụ về một Discriminated Union và giải thích về cách nó hoạt động ?
         // vd : 
@@ -105,5 +110,13 @@
                     return stuff.price
             }
         }
-        
+        // - Cách hoạt động : Dựa vào thuộc tính chung của object thường là type/kind để phân loại ra biến thuộc object nào từ đó
+        // có thể sử dụng thuộc tính và phương thức cách an toàn
+        // - Bổ sung : 
+            // + Discriminated union cực kì hữu ích khi làm việc với Redux actions hoặc các trạng thái phức tạp
+
+    // 6. Khi nào nên dùng non-null assertion (!) ? rủi ro là gì ? 
+        // - Nên dùng non-null assertion khi lập trình viên biết rõ rằng 1 biến không thể mang kiểu dữ liệu là undefined/null 
+        // -> rủi ro là khi 1 biến có thể mang kiểu dữ liệu undefined/null và gây ra lỗi mà type script không biết ở runtime
+
         
