@@ -179,5 +179,77 @@
         // + vd : 
         type PageInfo = Record<'home' | 'about' | 'contact' , {title : string}>
 
-// 2. Mapped Types 
+// 2. Mapped Types (kiểu ánh xạ)
     
+    // 1. Định nghĩa 
+    // - Mapped Types cho phép bạn tạo ra một kiểu đối tượng mới bằng cách lặp qua các thuộc tính (keys) của 1 kiểu khác và áp dụng 
+    // một biến đổi cho mỗi thuộc tính 
+
+    // - Cú pháp tổng quát : 
+        // type NewType = {
+        //      [K in keyof T] : T[K] 
+        // }
+
+        // + keyof : là toán  tử lấy tập hợp các khóa (tên thuộc tính) của 1 kiểu đối tượng trả về union type 
+        // -> Lấy toàn bộ tên thuộc tính của 1 đối tượng trả về kiểu union literal type 
+        
+        // + K in keyof T : Nó giống như một vòng lặp for...in nhưng ở cấp độ kiểu , duyệt qua từng khóa K thuộc union keyof T 
+        // -> Duyệt qua toàn bộ tên thuộc tính mỗi lần duyệt trả về tên thuộc tính đó dưới dạng chuỗi
+
+        // + T[K] : Nó giống như việc truy cập giá trị của object , nhưng ở cấp độ kiểu 
+        // -> trả về kiểu dữ liệu của tên thuộc tính được cung cấp 
+
+        // + [K in keyof T] : T[K] -> Duyệt qua tất cả tên thuộc tính của 1 đối tượng khác và tạo ra kiểu mới dựa trên tên thuộc tính
+        // này và kiểu được cung cấp 
+
+    // vd : 
+        interface Cleaner {
+            id : number,
+            name : string
+        }
+        // -> Bạn có thể tạo tất cả thuộc tính thành readonly
+        type ReadonlyCleaner = {
+            readonly [K in keyof Cleaner] : Cleaner[K]
+        }
+
+        // -> Đổi tất cả kiểu sang string 
+        type StringCleaner = {
+            [K in keyof Cleaner] : string
+        }
+
+    // - Khi nào dùng : 
+        // + Khi bạn muốn tự động biến đổi tất cả thuộc tính của 1 interface theo cùng 1 quy tắc thay vì khai báo tay từng cái
+        // + Xây dựng các utility type tùy chỉnh Partial , Readonly...
+
+// 3. Conditional Types (kiểu điều kiện)
+
+    // - Định nghĩa : conditional types cho phép bạn định nghĩa một kiểu dựa trên một điều kiện (tương tự if/else nhưng cho type)
+    // - Cú pháp : 
+        
+        // SomeType extends OtherType ? TrueType : FalseType
+
+    // - vd : 
+        type IsString<T> = T extends string ? 'Yes' : 'No';
+        type A = IsString<string>; // yes
+        type B = IsString<number>; // no
+
+        type UnpackPromise<T> = T extends Promise<infer U> ? U : T;
+        type Resolved = UnpackPromise<Promise<number>>;   // number
+        type NotPromise = UnpackPromise<string>;          // string
+
+    // - Khi nào dùng :
+        // + Khi bạn cần đưa ra quyết định dựa trên kiểu dữ liệu đầu vào
+        // + Xây dựng các utility types nâng cao 
+        // + Kết hợp với infer để trích xuất kiểu con từ 1 cấu trúc phức tạp 
+
+// 4. Kết hợp Mapped Types và Conditional Types 
+
+    type OnlyStringProps<T> = {
+        [K in keyof T as T[K] extends string ? K : never] : T[K];
+    }
+    // -> kiểu này chỉ lấy các thuộc tính mang kiểu là string hoặc là kiểu con của string 
+
+    type DeepPartial<T> = {
+        [K in keyof T ]?: T[K] extends object ? DeepPartial<T[K]> : T[K];
+    }
+    // -> Đệ quy chuyển hóa toàn bộ thuộc tính sang optional đặc biệt với kiểu object sẽ duyệt tiếp bên trong 

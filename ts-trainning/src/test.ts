@@ -216,7 +216,7 @@ export default interface Product{
     // nguyên thủy như number , string...Bạn sẽ gặp lỗi trong runtime
     // -> Vì tham số target có thể là kiểu number nên bắt buộc chặn kiểu number sau đó mới kiểm tra thuộc tính length trong object 
 
-// Bài tập thực hành : 
+// Bài tập thực hành ngày 5: 
 
     // 1. Partial và Required : Cho interface Config có host: string, port: number, secure: boolean.
     //  Tạo một hàm updateConfig(current: Config, updates: Partial<Config>): Config trả về object mới merge từ current và updates.
@@ -227,7 +227,7 @@ export default interface Product{
         secure : boolean
     }
 
-    export function updateConfig(current : Config , updates : Partial<Config> ){
+    export function updateConfig(current : Config , updates : Partial<Config> ) : Config{
         return {
             ...current,
             ...updates
@@ -236,6 +236,102 @@ export default interface Product{
 
     // 2. Pick và Omit : Cho interface Employee có id, name, position, salary, department.
     // Tạo type EmployeeSummary = Pick<Employee, 'id' | 'name' | 'position'>. 
-    // Tạo type ConfidentialEmployee = Omit<Employee, 'salary'>. Viết hàm getEmployeeSummary(emp: Employee): EmployeeSummary. 
+    // Tạo type ConfidentialEmployee = Omit<Employee, 'salary'>. Viết hàm getEmployeeSummary
 
+    interface Employee{
+        id : number,
+        name : string,
+        position : number,
+        salary : number,
+        department : string
+    }
+
+    type EmployeeSummary = Pick<Employee , 'id' | 'name' | 'position'>;
+    type ConfidentialEmployee = Omit<Employee , 'salary'>;
+
+    export function getEmployeeSummary(emp : Employee) : EmployeeSummary  {
+        return {
+            id : emp.id,
+            name : emp.name,
+            position : emp.position
+        };
+    }
+
+    export const employeeConfidential : ConfidentialEmployee = {
+        id : 1,
+        name : 'fak',
+        position : 103,
+        department : 'bv phương đông'
+    }
+
+    // 3. Record : Tạo một const rolePermissions: Record<string, string[]> trong đó key là role ('admin', 'editor', 'viewer'), 
+    // value là mảng các quyền tương ứng. Viết hàm hasPermission(role: string, permission: string): boolean.
+
+    const rolePermission : Record<string , string[]> = {
+        admin : ['create' , 'read' , 'update' , 'delete'],
+        editor : ['read' , 'update'],
+        viewer : ['read']
+    };
+
+    export function hasPermission(role : string , permission : string) : boolean{
+        const permissions = rolePermission[role];
+        return permissions ? permissions.includes(permission) : false
+    }
     
+    // 4. ReturnType và Parameters : cho hàm function createUser(name: string, age: number, isAdmin: boolean) { return { name, age, isAdmin };}. 
+    // Dùng ReturnType và Parameters để tạo type UserFromCreate và CreateUserParams. Khai báo biến với các type đó.
+
+    function createUser(name : string , age : number , isAdmin : boolean){
+        return {
+            name,
+            age,
+            isAdmin
+        }
+    }
+
+    type UserFromCreate = ReturnType<typeof createUser>;
+    type UserFromParams = Parameters<typeof createUser>;
+
+    const userNo1 : UserFromCreate = {
+        name : 'mixi',
+        age : 10,
+        isAdmin : true
+    }
+
+    const arrUserNo1 : UserFromParams = [userNo1.name , userNo1.age , userNo1.isAdmin];
+    console.log(arrUserNo1);
+
+    // 5. Mapped Type tự tạo : Viết một mapped type ReadonlyPartial<T> kết hợp vừa readonly vừa optional.
+    //  Áp dụng cho interface Book (title, author, year).
+
+    interface Book {
+        title : string,
+        author : string,
+        year : number
+    }
+
+    type ReadonlyPartial<T> = {
+        readonly [K in keyof T ] ?: T[K]
+    }
+
+    const bookNo1 : ReadonlyPartial<Book> = {
+        title : 'Những người khốn khổ',
+        author : 'victor'
+    }
+    console.log(bookNo1);
+
+    // 6.Kết hợp : Cho union type type Event = 'click' | 'scroll' | 'mousemove';. Dùng Exclude để tạo type ExcludeClick,
+    //  và dùng Extract để tạo type ExtractScrollOrMouse. Viết hàm handleEvent(event: ExcludeClick).
+
+    type Event = 'click' | 'scroll' | 'mousemove';
+
+    type ExcludeClick = Exclude<Event , 'scroll' | 'mousemove'>;
+    type ExtractScrollOrMouse = Extract<Event , 'scroll' | 'mousemove' >;
+
+    export function handleEvent(event : ExcludeClick | ExtractScrollOrMouse){
+        if(event === 'click'){
+            console.log(`on${event}`)
+        }else{
+            console.log(event)
+        }
+    }
