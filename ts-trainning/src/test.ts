@@ -332,6 +332,6 @@ export default interface Product{
         if(event === 'click'){
             console.log(`on${event}`)
         }else{
-            console.log(event)
+            console.log(`on${event}`)
         }
     }
