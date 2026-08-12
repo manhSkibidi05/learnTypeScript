@@ -335,3 +335,134 @@ export default interface Product{
             console.log(`on${event}`)
         }
     }
+
+// Bài thực hành ngày 6 : 
+
+// - Thiết kế cấu trúc của 1 task 
+
+    type TaskStatus = 'Uncompleted' | 'Completed'
+
+    interface Task {
+        id : number,
+        title : string,
+        description ?: string,
+        status : TaskStatus,
+        createAt : Date
+    }
+
+// - Xây dựng cơ sở dữ liệu lưu trữ task và các thao tác cơ bản với dữ liệu 
+
+    const Tasks : Task[] = [];
+
+    // + Thêm task mới : 
+    function addTask(item : Task) : void{
+        Tasks.push(item)
+    }
+
+    // + Lấy toàn bộ task : 
+    function getAll() : Task[] {
+        return Tasks
+    }
+
+    // + Lấy task bằng id : 
+    function getById(id : number) : Task | undefined{
+        return Tasks.find(item => item.id === id)
+    }
+
+    // + Cập nhật task :
+    function update(id : number , itemUpdated : Partial<Task>) : Task | undefined{
+        const index = Tasks.findIndex(val => val.id === id);
+        if(index !== -1){
+            return Tasks[index] = {...Tasks[index] , ...itemUpdated}
+        }
+        return undefined
+    }
+
+    // + Xóa  task: 
+    function removeById(id : number) : boolean{
+        const index = Tasks.findIndex(val => val.id === id);
+        if(index !== -1){
+            Tasks.splice(index , 1);
+            return true;
+        }
+        return false;
+    }
+
+// - Các hàm tiện ích 
+
+    // + hàm kiểm tra status của task có Done hay không 
+    export function isTaskDone(task : Task) : boolean {
+        return task.status === 'Completed'
+    }
+
+    // + Discriminated union cho filter theo trạng thái 
+    type FilterCriterion = 
+        { kind : 'status' ; value : TaskStatus }
+        | { kind : 'search' ; query : string }
+
+    function filterTasks(tasks : Task[] , criterion : FilterCriterion) : Task[] {
+        switch(criterion.kind){
+            case 'status' : 
+                return tasks.filter(task => task.status === criterion.value);
+            case 'search' : 
+                return tasks.filter(task => task.title.includes(criterion.query));
+        }
+    }
+
+// 1. Thêm 2 task với các trạng thái  khác nhau 
+
+    const task1 : Task = {
+        id : 1 , 
+        title : 'workout',
+        status : 'Completed',
+        createAt : new Date()
+    }
+    const task2 : Task = {
+        id : 2,
+        title : 'learn about life',
+        status : 'Uncompleted',
+        description : 'now or never',
+        createAt : new Date()
+    }
+    const task3 : Task = {
+        id : 3,
+        title : 'death',
+        status : 'Completed',
+        createAt : new Date()
+    }
+    addTask(task1);
+    addTask(task2);
+    addTask(task3)
+    export const show1 = getAll();
+
+// 2. Sử dụng hàm update thay đổi 1 task
+
+    console.log(update(2 , {title : 'learning about life'}));
+
+// 3. Xóa 1 task 
+
+    console.log(removeById(3));
+
+// 4. Tìm 1 task
+
+    console.log(getById(2));
+
+// 5. Lọc các task đã hoàn thành 
+
+    const filterTaskDone : FilterCriterion = {
+        kind : 'status',
+        value : 'Completed'
+    }
+
+    console.log(filterTasks(Tasks , filterTaskDone));
+
+// 6. Thử dùng mapped type để tạo TaskStringProps chỉ chứa các prop có kiểu string của Task.
+
+    type TaskStringProps<T> = {
+        [K in keyof T as T[K] extends string ? K : never] : T[K]
+    }
+    export const show2 : TaskStringProps<Task> = {
+        title : 'adu',
+        status : 'Completed',
+    }
+    

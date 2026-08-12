@@ -9,6 +9,7 @@ import type { ErrorMessage } from './test';
 import { handleMessage } from './test';
 import type { Config } from './test';
 import { updateConfig } from './test';
+import { show1 } from './test';
 
 function App() {
   interface DiscountProduct extends Product{
@@ -87,6 +88,19 @@ function App() {
       <hr />
       <h3>Cổng kết nối ban đầu: {`${ketNoi.host}:${ketNoi.port}`}</h3>
       <h3>Cổng kết nối sau đó : {`${updateConfig(ketNoi , ketNoiLai).host}:${updateConfig(ketNoi , ketNoiLai).port}`}</h3>
+      <h2>To-do List</h2>
+      <h3>Danh sách list</h3>
+      <ul>
+        {
+          show1.map(task => 
+            <li>
+              <input type="checkbox" checked={task.status === 'Completed'} />
+              <span>Title : {task.title}</span>
+              {task.description && <p>desc : {task.description}</p>}
+            </li>
+          )
+        }
+      </ul>
     </>
   )
 }

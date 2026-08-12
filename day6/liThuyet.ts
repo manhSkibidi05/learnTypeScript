@@ -25,9 +25,9 @@
         createAt : Date
     }
 
-// - Xây dựng cơ sở dữ liệu lưu trữ task và các thao tác cơ bản 
+// - Xây dựng cơ sở dữ liệu lưu trữ task và các thao tác cơ bản với dữ liệu 
 
-    let Tasks : Task[] = [];
+    const Tasks : Task[] = [];
 
     // + Thêm task mới : 
     function addTask(item : Task) : void{
@@ -54,11 +54,32 @@
     }
 
     // + Xóa  task: 
-    function removeById(id : number) : Task | undefined{
-        const removed = Tasks.find(val => val.id === id);
-        if(removed){
-            Tasks = Tasks.filter(val => val.id !== id)
-            return removed;
+    function removeById(id : number) : boolean{
+        const index = Tasks.findIndex(val => val.id === id);
+        if(index !== -1){
+            Tasks.splice(index , 1);
+            return true;
         }
-        return removed;
+        return false;
+    }
+
+// - Các hàm tiện ích 
+
+    // + hàm kiểm tra status của task có Done hay không 
+    function isTaskDone(task : Task) : boolean {
+        return task.status === TaskStatus.Done
+    }
+
+    // + Discriminated union cho filter theo trạng thái 
+    type FilterCriterion = 
+        { kind : 'status' ; value : TaskStatus }
+        | { kind : 'search' ; query : string }
+
+    function filterTasks(tasks : Task[] , criterion : FilterCriterion) : Task[] {
+        switch(criterion.kind){
+            case 'status' : 
+                return tasks.filter(task => task.status === criterion.value);
+            case 'search' : 
+                return tasks.filter(task => task.title.includes(criterion.query));
+        }
     }
