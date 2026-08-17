@@ -105,3 +105,4 @@
     // 5. Lợi ích dùng function property 
         // + Linh hoạt : Bạn có thể định nghĩa các hàm với cấu trúc khác nhưng vẫn giữ nguyên kiểu là nhận vào number và trả về number
         // + Tái sử dụng : Khi định nghĩa component chỉ cần gọi hàm mà không cần biết công thức cụ thể 
+
