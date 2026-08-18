@@ -106,3 +106,19 @@
         // + Linh hoạt : Bạn có thể định nghĩa các hàm với cấu trúc khác nhưng vẫn giữ nguyên kiểu là nhận vào number và trả về number
         // + Tái sử dụng : Khi định nghĩa component chỉ cần gọi hàm mà không cần biết công thức cụ thể 
 
+// - Review (ngày 1) : 
+
+    // - Định nghĩa function component khi sử dụng TypeScript 
+        // + Kiểu trả về của function component : luôn trả về là phần tử JSX 
+        // -> Khi định nghĩa kiểu trả về thì có thể không thêm để ts tự suy luận , hoặc là thêm kiểu trả về là React.JSX.Element 
+        // -> React.FC cũng là kiểu trả về cho function component nhưng ít sử dụng hơn do tự động thêm children vào props ...
+
+        // + Kiểu nhận vào của function component: luôn nhận vào là 1 object 
+        // -> Khi định nghĩa kiểu nhận vào thì có thể định nghĩa kiểu của 1 object bằng interface hoặc type alias 
+        // -> Khi sử dụng component cần điền đầy đủ các giá trị của các thuộc tính props 
+
+        // + Thuộc tính mang kiểu hàm : thuộc tính bên trong object có thể mang bất kì kiểu nào trong đó có hàm 
+        // -> Khi định nghĩa kiểu hàm cho 1 thuộc tính chỉ cần định nghĩa kiểu trả về cho hàm đó mà chưa cần định nghĩa công thức sử dụng trong đó
+        // -> Khi sử dụng component có thuộc tính mang kiểu hàm cần định nghĩa công thức hàm đó cần tuân thủ đúng kiểu trả về lúc này nó sẽ được gọi là và thực hiện bên trong component
+
+        

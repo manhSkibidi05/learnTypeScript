@@ -3,7 +3,7 @@
 
     interface ButtonProps {
         label : string,
-        onClick : () => void,
+        onClick : (color : string) => void,
         variant ?: Variant,
         disabled ?: boolean 
     }
@@ -23,7 +23,7 @@
         }
 
         return <button 
-            onClick={onClick} 
+            onClick={() => onClick(takeClassColor(variant))} 
             disabled={disabled} 
             className={takeClassColor(variant)}>
                 {label}
