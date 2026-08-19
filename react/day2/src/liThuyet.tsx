@@ -133,4 +133,62 @@
         // + Tham chiếu đến một phần tử DOM 
     // -> Trong TypeScript useRef có các overload phức tạp hơn 
 
-   
+    // - Sử dụng với TypeScript : 
+        // + Khi dùng với DOM element : Nên khai báo kiểu của phần tử và khởi tạo nó bằng null 
+
+        import {useRef} from 'react';
+
+        export function FocusInput(){
+            const inputRef = useRef<HTMLInputElement>(null);
+
+            useEffect(() => {
+                inputRef.current?.focus();
+            }, []);
+
+            const handleClick = () => {
+                console.log(inputRef.current?.value);
+            }
+
+            return(
+                <div>
+                    <input ref={inputRef} type="text" />
+                    <button onClick={handleClick}>Lấy dữ liệu input</button>
+                </div>
+            )
+        }
+
+        // -> Giải thích : 
+            // + useRef<HTMLInputElement>(null) : khởi tạo phần tử với kiểu là input element | null với giá trị khởi tạo = null 
+            // + thuộc tính ref của thẻ input sẽ chứa phần tử này -> lúc này thẻ input đó đang được inputRef tham chiếu tới 
+            // + để truy cập phần tử inputRef tham chiếu tới cần dùng thuộc tính current và kiểm tra null ?. trước khi sử dụng thuộc tính/phương thức 
+
+        // + Khi dùng để lưu trữ giá trị không gây re-render 
+
+        export function RenderCounter(){
+            const [count , setCount] = useState(0);
+            const renderCount = useRef(0);
+
+            useEffect(() => {
+                renderCount.current +=1;
+            });
+
+            return(
+                <div>
+                    <h1>Số đếm : {count}</h1>
+                    <p>Số lần render : {renderCount.current}</p>
+                    <button onClick={() => setCount(count + 1)}>Tăng đếm</button>
+                </div>
+            )
+        }
+
+        // -> Giải thích : 
+            // + useRef là 1 object chứa thuộc tính current nơi chứa dữ liệu 
+            // + khi thay đổi giá trị của current không re-render vì giá trị ref không phải state
+            // + sử dụng useEffect với không truyền vào dependency thì lúc này mỗi lần render chạy lại callback của useEffect 
+        
+    // - Lưu ý khi sử dụng useRef : 
+        // + Không dùng ref thay thế cho state nếu giá trị cần hiển thị lên UI và phải re-render thay đổi
+        // + Dùng với TypeScript cần khai báo kiểu rõ ràng 
+        // + Với ref dùng cho tham chiếu tới phần tử DOM luôn khởi tạo giá trị ban đầu = null và kiểm tra null trc khi truy cập
+        // + useRef trả về object giống nhau qua mỗi lần render vậy bạn có thể dùng nó đánh giá trị trước và sau
+        
