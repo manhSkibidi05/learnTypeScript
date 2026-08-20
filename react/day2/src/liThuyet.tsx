@@ -86,8 +86,13 @@
 
 // 2. useEffect với TypeScript 
 
-    // - useEffect là hook do react tạo sẵn , sử dụng useEffect để xử lí các side effect (hiệu ứng phụ) , hiệu ứng phụ là các thao tác không làm thay đổi giao diện
-    // - useEffect nhận vào 1 hàm xử lí hiệu ứng phụ có thể trả về hàm cleanup hoặc void , nhận vào 1 mảng dependency chứa các phần tử mà useEffect phụ thuộc 
+    // - Side effect (hiệu ứng phụ) : Là các tính toán tạo ra các giá trị và các giá trị này chúng có thể dẫn đến thay đổi UI nhưng không trực tiếp tạo ra UI 
+    // vd : gọi API , đăng kí sự kiện , cập nhật state...
+
+    // - useEffect sinh ra để xử lý các side effect bao gồm việc cập nhật state dẫn đến re-render 
+    // -> useEffect không phân biệt side effect có ảnh hưởng tới UI hay không mà nó chỉ đảm bảo code trong hàm callback chạy sau khi React đã commit UI ra màn hình
+    // -> khi khởi tạo useEffect cần quan tâm đến kiểm soát dependency array tránh lặp vô hạn và xử lí cleanup đúng cách tránh rò rỉ bộ nhớ 
+
     // -> useEffect giúp quản lí vòng đời của function component , khi component được mount chạy hàm xử lí của useEffect chạy nếu các phần tử trong mảng dependency thay
     // đổi hàm cleanup sẽ chạy nếu có và chạy lại hàm xử lí của useEffect , khi component unmount chạy cleanup lần cuối .
     // - Khi sử dụng useEffect với TypeScript : hàm callback trả về void và mảng dependency là tuple , cần chú ý với kiểu trả về của hàm xử lí bên trong hàm callback
