@@ -20,8 +20,8 @@
                 <p>Số lần đếm : {count}</p>
                 <input onChange={(e) => setStep(changeStep(e.target.value))} type="text" />
                 <p>Số bước nhảy : {step}</p>
-                <button onClick={() => setCount(count + step)}>Tăng đếm</button>
-                <button onClick={() => setCount(count - step)}>Giảm đếm</button>
+                <button onClick={() => setCount(prev => prev + step)}>Tăng đếm</button>
+                <button onClick={() => setCount(prev => prev - step)}>Giảm đếm</button>
             </>
         )
     }

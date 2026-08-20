@@ -192,3 +192,8 @@
         // + Với ref dùng cho tham chiếu tới phần tử DOM luôn khởi tạo giá trị ban đầu = null và kiểm tra null trc khi truy cập
         // + useRef trả về object giống nhau qua mỗi lần render vậy bạn có thể dùng nó đánh giá trị trước và sau
         
+// - Tổng kết và yêu cầu : 
+    // + Với useState : hàm setState nhận tham số đầu vào là 1 hàm callback để tính toán giá trị dựa trên giá trị trước đó để trả về giá trị mới 
+    // + Với useEffect : Dependency array phải đúng nếu muốn chạy 1 lần khi component mount dùng [] , nếu muốn phụ thuộc biến nào hãy liệt kê biến đó
+    // + Với useRef : Khi tham chiếu tới 1 phần tử DOM cần khởi tạo null giá trị ban đầu và kiểm tra null khi sử dụng thuộc tính/phương thức
+    // + Lấy dữ liệu API : Định nghĩa interface ngoài function component và chuẩn form đối với dữ liệu trả về 

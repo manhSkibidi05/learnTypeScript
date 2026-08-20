@@ -8,27 +8,29 @@
 
     function Timer(){
         const [now , setNow] = useState(new Date());
-        const idInterval = useRef(0);
-
-        const pauseTimer = () => {
-            clearInterval(idInterval.current);
-        }
-
+        const idInterval = useRef<number | null>(null);
+        const [isRunning , setIsRunning] = useState(true)
+        
         useEffect(() => {
-            idInterval.current = window.setInterval(() => {
-                setNow(new Date());
-            },1000)
-
-            return () => {
-                pauseTimer();
+            if(isRunning){
+                idInterval.current = window.setInterval(() => {
+                    setNow(new Date());
+                },1000)
+            }else{
+                if(idInterval.current !== null) clearInterval(idInterval.current);
             }
-        }, [now])
+            
+            return () => {
+                if(idInterval.current !== null) clearInterval(idInterval.current);
+            }
+        }, [isRunning])
 
         return (
             <>
                 <h2>Bài 2 : Đồng hồ điện tử</h2>
                 <p>{now.getHours().toString().padStart(2 , '0')} : {now.getMinutes().toString().padStart(2 , '0')} : {now.getSeconds().toString().padStart(2 , '0')}</p>
-                <button onClick={pauseTimer}>Tạm dừng</button>
+                <button onClick={() => setIsRunning(false)}>Tạm dừng</button>
+                <button onClick={() => setIsRunning(true)}>Tiếp tục</button>
                 <button onClick={() => setNow(new Date())}>Chạy mới</button>
             </>
         )
