@@ -10,4 +10,29 @@
         // + Thực hiện validation cơ bản và hiển thị lỗi 
         // + Nắm được các lưu ý khi làm việc với event target và generic type
 
-//
+// 1. Các Event Types thường dùng 
+
+    // - Khi định nghĩa hàm xử lý khi sự kiện diễn ra với các sự kiện cần tham số event thì cần cung cấp kiểu cho tham số event này dựa trên các sự kiện khác nhau 
+    // thì kiểu của event khác nhau 
+
+        // + onChange={(e : React.ChangeEvent<HTML.InputElement>) => ...}
+        // + onSubmit={(e: React.FormEvent<HTMLFormElement>) => ...}
+        // + onClick={(e: React.MouseEvent<HTMLButtonElement>) => ...}
+        // + onFocus={(e: React.FocusEvent<HTMLInputElement>) => ...}
+
+// 2. Typing Event Handlers trong Props
+
+    // - Với các hàm handler được định nghĩa ở component cha muốn truyền xuống component con thông qua props thì ở component con cần định nghĩa kiểu các hàm đó trong
+    // interface hoặc type alias rõ ràng 
+
+// 3. Controlled Component 
+
+    // - Với các phần tử giao diện hiện thị dữ liệu dựa vào người dùng nhập ưu tiên sử dụng controlled component các dữ liệu đều được quản lý bởi useState khi gặp 
+    // sự kiện thay đổi gọi hàm setState rồi cung cấp giá trị mới sau đó re-render giao diện hiện thị dữ liệu mới 
+
+// 4. Xử lý Form Submission 
+
+    interface FormData {
+
+        
+    }
